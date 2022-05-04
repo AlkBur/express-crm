@@ -1,0 +1,126 @@
+<script>
+    let ui = {
+        cols: [
+            { gravity: 1, template: "" },
+            {
+                rows: [
+                    { gravity: 1, template: "" },
+                    {
+                        view: "form",
+                        gravity: 1,
+                        id: 'loginForm',
+                        width: 500,
+
+                        elements: [
+                            {
+                                view: "text",
+                                id: "username",
+                                name: "username",
+                                label: "Пользователь",
+                                value: "",
+                                required: true,
+                                placeholder: 'Пользователь'
+                            },
+                            {
+                                view: "text",
+                                id: "password",
+                                name: "password",
+                                label: "Password",
+                                value: "",
+                                required: false,
+                                type: "password"
+                            },
+                            {
+                                view: "button",
+                                // id: "login",
+                                // name: "login",
+                                label: "Войти",
+                                hotkey: "enter",
+                                click: function () {
+                                    let component = $$("loginForm");
+                                    if (component.validate()) {
+                                        component.disable();
+                                        component.showProgress();
+                                        let values = $$("loginForm").getValues();
+
+                                        //window.location.href = '/base';
+                                        webix.send("/login", values, "post");
+                                        /*
+                                        webix.ajax().post('/login', values)
+                                            .then(result => {
+                                                //const json = result.json()
+                                                //localStorage.setItem('token', json.token);
+                                                //document.cookie = `token=${json.token}`
+                                                // webix.message({
+                                                //     type: "success",
+                                                //     text: "User OK."
+                                                // });
+    
+                                                // component.hideProgress();
+                                                // component.enable();
+                                                // component.focus();
+                                                window.location.href = '/ui';
+                                                // window.location.href =
+                                                //     window.location.protocol + "//" +
+                                                //     json.username + ":" + json.token + "@" +
+                                                //     window.location.hostname +
+                                                //     (window.location.port ? ":" + window.location.port : "") +
+                                                //     '/ui';
+    
+    
+                                            }).fail(err => {
+                                                webix.message({
+                                                    type: "error",
+                                                    text: "Ошибка авторизации пользователя."
+                                                });
+    
+                                                component.hideProgress();
+                                                component.enable();
+                                                component.focus();
+                                            });
+    
+    
+                                        /*
+                                        if (true === values.rememberme) {
+                                            Cookies.set("Crm", values);
+                                        } else {
+                                            // Clear cookie
+                                            Cookies.remove("Crm");
+                                        }
+                                        
+    
+    
+                                        authService.login(values.username, values.password).catch(e => {
+                                            webix.message({
+                                                type: "error",
+                                                text: "User/password combination not recognized"
+                                            });
+    
+                                            component.hideProgress();
+                                            component.enable();
+                                            component.focus();
+                                        });
+                                        */
+
+                                    } else {
+                                        $$("loginForm").focus();
+                                    }
+                                }
+                            }
+                        ],
+                        elementsConfig: {
+                            labelPosition: "top",
+                            validateEvent: "key"
+                        }
+                    },
+                    { gravity: 1, template: "" }
+                ]
+            },
+            { gravity: 1, template: "" }
+        ]
+    };
+
+    webix.ui(ui);
+    webix.extend($$("loginForm"), webix.ProgressBar);
+    webix.message.position = "bottom";
+</script>
